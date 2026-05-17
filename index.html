@@ -11,11 +11,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400&display=swap" rel="stylesheet" />
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --blush:       #e8897a;
+      --blush-light: #f5d5d0;
+      --blush-dark:  #c96b5a;
+      --ink:         #2c2420;
+      --ink-light:   #6b5c54;
+      --ink-faint:   #c4b5ad;
+      --border:      #e8ddd8;
+      --bg:          #fdfaf8;
+      --white:       #ffffff;
+      --radius-sm:   8px;
+      --radius:      12px;
+    }
 
     body {
       font-family: system-ui, sans-serif;
-      background: #FFFBF7;
+      background: var(--bg);
+      color: var(--ink);
       height: 100vh;
       overflow: hidden;
       display: flex;
@@ -24,66 +39,90 @@
 
     /* ── Header ── */
     #header {
-      background: #f0ce5b;
-      padding: 12px 24px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(180,130,0,0.15);
     }
-    #header .brand-sub {
-      font-size: 9px; font-weight: 800;
-      color: rgba(60,40,10,0.55);
-      letter-spacing: 3px; text-transform: uppercase;
+    .header-brand {
+      display: flex;
+      flex-direction: column;
     }
-    #header .brand-title {
-      font-size: 20px; font-weight: 900; color: #3a2208;
+    .header-sub {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--ink-faint);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
-    #save-btn {
-      background: #1c7b1c; color: white;
-      font-family: inherit; font-weight: 900; font-size: 14px;
-      padding: 11px 22px; border-radius: 40px; border: none;
+    .header-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 1px;
+    }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    .btn-ghost {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--ink-light);
+      font-size: 12px;
+      font-family: inherit;
+      font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      display: flex; align-items: center; gap: 8px;
-      transition: opacity 0.2s;
+      transition: all 0.15s;
     }
-    #save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    #reset-btn {
-      background: white; color: #3a2208;
-      font-family: inherit; font-weight: 900; font-size: 14px;
-      padding: 11px 22px; border-radius: 40px; border: none;
+    .btn-ghost:hover { border-color: var(--blush-light); color: var(--blush); }
+
+    .btn-primary {
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: none;
+      background: var(--blush);
+      color: var(--white);
+      font-size: 12px;
+      font-family: inherit;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-      display: flex; align-items: center; gap: 8px;
+      transition: background 0.15s;
     }
+    .btn-primary:hover { background: var(--blush-dark); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
     /* ── Body ── */
     #body { flex: 1; display: flex; overflow: hidden; min-height: 0; }
 
-    /* ── Left: preview — 50% width, portrait 2:3 ── */
+    /* ── Left: card preview ── */
     #preview-col {
-      width: 50%; flex-shrink: 0;
-      padding: 24px 16px;
-      display: flex; align-items: center; justify-content: center;
-      box-sizing: border-box;
+      width: 46%;
+      flex-shrink: 0;
+      background: #f0ebe7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
     }
-    #portrait-outer {
+    #card-outer {
       width: 100%;
-      max-width: calc((100vh - 66px - 48px) * 2 / 3);
+      max-width: calc((100vh - 57px - 64px) * 2 / 3);
       aspect-ratio: 2 / 3;
       position: relative;
+      filter: drop-shadow(0 8px 32px rgba(44,36,32,0.18));
     }
-    #portrait-wrap {
+    #card-wrap {
       position: absolute; inset: 0;
-      border-radius: 20px;
+      border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
       transition: background 0.25s;
     }
-    #portrait-wrap > img,
-    #portrait-wrap > svg {
+    #card-wrap > img,
+    #card-wrap > svg {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
     }
@@ -91,155 +130,177 @@
 
     /* ── Right: options ── */
     #options-col {
-      width: 50%; flex-shrink: 0;
+      width: 54%;
+      flex-shrink: 0;
       overflow-y: auto;
-      padding: 20px 20px 40px 14px;
-      display: flex; flex-direction: column; gap: 20px;
+      padding: 24px 28px 48px;
+      background: var(--white);
     }
     #options-col::-webkit-scrollbar { width: 4px; }
-    #options-col::-webkit-scrollbar-thumb { background: #f0ce5b; border-radius: 4px; }
+    #options-col::-webkit-scrollbar-thumb { background: var(--blush-light); border-radius: 4px; }
 
-    .section-label {
-      font-size: 11px; font-weight: 900; color: #3351c6;
-      text-transform: uppercase; letter-spacing: 2.5px;
-      display: flex; align-items: center; gap: 7px;
+    /* ── Section ── */
+    .pc-section { margin-bottom: 22px; }
+    .pc-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
       margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .section-divider { height: 1px; background: #f0e8dc; margin-top: 6px; }
+    .pc-label-count { font-size: 10px; color: var(--ink-faint); }
+    .pc-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 
-    /* Thumbnail grid */
-    .thumb-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
-      gap: 5px;
-    }
-    .thumb-btn {
-      width: 100%; aspect-ratio: 2 / 3;
-      border-radius: 8px; border: 2px solid #e8ddd0;
-      background: #F5EFE8;
-      cursor: pointer; overflow: hidden; padding: 0;
-      position: relative;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    /* ── Option grid (thumbnails) ── */
+    .pc-option-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pc-option-item {
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      overflow: hidden;
       transition: all 0.15s;
+      background: var(--white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 64px;
+      user-select: none;
+    }
+    .pc-option-item:hover { border-color: var(--blush-light); }
+    .pc-option-item.selected { border-color: var(--blush); }
+    .pc-option-item.selected::after {
+      content: ""; position: absolute; inset: 0;
+      background: rgba(232,137,122,0.10);
+      border-radius: 6px; pointer-events: none;
+    }
+    .pc-thumb {
+      width: 64px; height: 96px;
       display: flex; align-items: center; justify-content: center;
+      background: #f9f3ef;
     }
-    .thumb-btn.none-btn { background: #F8F3EE; }
-    .thumb-btn.selected { border: 3px solid #9a8a78; box-shadow: none; }
-    .thumb-btn img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-    .thumb-btn .thumb-label { font-size: 7px; color: #C0A888; font-weight: 700; text-align: center; padding: 2px; line-height: 1.3; }
-    .thumb-tick { display: none; }
+    .pc-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+    .pc-thumb.placeholder { background: #f0e8e3; }
+    .pc-option-label {
+      font-size: 10px; text-align: center; padding: 3px;
+      color: var(--ink-light);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;
+    }
 
-    /* Face thumbnails */
-    .face-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
-      gap: 5px;
+    /* None button */
+    .pc-option-item.none-item .pc-thumb {
+      font-size: 20px; color: var(--ink-faint);
     }
-    .face-btn {
-      width: 100%; aspect-ratio: 2 / 3;
-      border-radius: 8px; border: 2px solid #e8ddd0;
-      background: #F5EFE8;
-      cursor: pointer; overflow: hidden; padding: 0;
-      position: relative;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      transition: all 0.15s;
-    }
-    .face-btn img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-    .face-btn.selected { border: 3px solid #9a8a78; box-shadow: none; }
-    .face-btn .thumb-tick { display: none; }
 
-    /* Hair colour swatches */
-    .haircolor-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .haircolor-btn {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 2px solid #e8ddd0;
-      cursor: pointer; flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      transition: all 0.15s;
+    /* ── Colour swatches (hair, text colour, bg) ── */
+    .pc-swatch-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .pc-swatch {
+      width: 28px; height: 28px; border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      outline: 2px solid transparent;
+      transition: all 0.15s; flex-shrink: 0;
     }
-    .haircolor-btn.selected { border: 3px solid #9a8a78; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .pc-swatch:hover { transform: scale(1.12); }
+    .pc-swatch.selected { outline: 2px solid var(--blush); outline-offset: 3px; }
 
     /* Text colour — "A" buttons */
-    .namecolor-row { display: flex; gap: 7px; flex-wrap: wrap; }
-    .namecolor-btn {
-      width: 40px; height: 40px; border-radius: 8px;
-      border: 2px solid #e8ddd0; background: #F8F3EE;
-      cursor: pointer; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; font-weight: 900; font-family: system-ui;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-      transition: all 0.15s;
-    }
-    .namecolor-btn.selected { border: 3px solid #9a8a78; }
-
-    /* Background colour */
-    .bgcolor-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
-      gap: 5px;
-    }
-    .bgcolor-btn {
-      width: 100%; aspect-ratio: 2 / 3;
-      border-radius: 8px; border: 2px solid #e8ddd0;
+    .pc-text-swatch {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--white);
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700;
+      font-family: system-ui;
       transition: all 0.15s;
     }
-    .bgcolor-btn.selected { border: 3px solid #9a8a78; }
+    .pc-text-swatch.selected { border-color: var(--blush); box-shadow: 0 0 0 2px var(--blush-light); }
 
-    /* Text inputs */
-    .card-text-input {
-      width: 100%; padding: 14px 18px;
-      border-radius: 16px; border: 2px solid #e8ddd0;
-      font-size: 15px; font-weight: 500;
-      font-family: system-ui;
-      background: #fff; outline: none;
-      caret-color: #c2221b;
-      transition: border 0.15s;
+    /* Background colour — small portrait-shaped rectangles */
+    .pc-bg-item {
+      width: 40px; height: 60px;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
     }
-    .card-text-input:focus { border-color: #c2221b; }
+    .pc-bg-item:hover { border-color: var(--blush-light); }
+    .pc-bg-item.selected { border-color: var(--blush); box-shadow: 0 0 0 2px var(--blush-light); }
+
+    /* ── Hair colour tabs ── */
+    .pc-tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+    .pc-tab {
+      padding: 5px 13px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--ink-light);
+      font-size: 11px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pc-tab:hover { border-color: var(--blush-light); }
+    .pc-tab.active { background: var(--blush); border-color: var(--blush); color: var(--white); }
+
+    /* ── Text inputs ── */
+    .pc-text-input {
+      width: 100%; padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: system-ui;
+      background: var(--white);
+      color: var(--ink);
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .pc-text-input:focus { border-color: var(--blush); }
+    .pc-char-count { font-size: 11px; color: var(--ink-faint); text-align: right; margin-top: 4px; }
   </style>
 </head>
 <body>
 
+<!-- Header -->
 <div id="header">
-  <div>
-    <div class="brand-sub">Portraits by Jun-Yi</div>
-    <div class="brand-title">Design your card 🎨</div>
+  <div class="header-brand">
+    <span class="header-sub">Portraits by Jun-Yi</span>
+    <span class="header-title">Design your card</span>
   </div>
-  <div style="display:flex;gap:10px;align-items:center;margin-left:auto;">
-    <button id="reset-btn">🔄 Start over</button>
-    <button id="save-btn">⬆️ Save &amp; AirDrop</button>
+  <div class="header-actions">
+    <button class="btn-ghost" id="reset-btn">Start over</button>
+    <button class="btn-primary" id="save-btn">Save &amp; AirDrop</button>
   </div>
 </div>
 
+<!-- Body -->
 <div id="body">
 
+  <!-- Left: card preview -->
   <div id="preview-col">
-    <div id="portrait-outer">
-      <div id="portrait-wrap">
-        <img id="layer-clothes" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="clothes" />
-        <img id="layer-face"    style="display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="face" src="images/face-fair.png" />
-        <img id="layer-hair"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="hair" />
-        <img id="layer-acc"     style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="accessory" />
-
-        <!-- Text overlay: recipient name (Lora, all caps) + message (De Lionist) -->
+    <div id="card-outer">
+      <div id="card-wrap">
+        <img id="layer-clothes" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-face"    style="display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" src="images/face-fair.png" />
+        <img id="layer-hair"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-acc"     style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
         <svg id="layer-text" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" xmlns="http://www.w3.org/2000/svg">
           <text id="recipient-text"
             x="50%" y="76%"
-            text-anchor="middle"
-            dominant-baseline="auto"
-            font-family="Lora, Georgia, serif"
-            font-weight="400"
-            letter-spacing="2"
-            fill="#2c2420"
+            text-anchor="middle" dominant-baseline="auto"
+            font-family="Lora, Georgia, serif" font-weight="400"
+            letter-spacing="2" fill="#2c2420"
           ></text>
           <text id="message-text"
             x="50%" y="87%"
-            text-anchor="middle"
-            dominant-baseline="auto"
-            font-family="De Lionist, Georgia, serif"
-            font-weight="400"
+            text-anchor="middle" dominant-baseline="auto"
+            font-family="De Lionist, Georgia, serif" font-weight="400"
             fill="#2c2420"
           ></text>
         </svg>
@@ -247,57 +308,79 @@
     </div>
   </div>
 
+  <!-- Right: options -->
   <div id="options-col">
-    <div>
-      <div class="section-label"><span>🎨</span> Face</div>
-      <div class="face-grid" id="skin-swatches"></div>
-      <div class="section-divider"></div>
+
+    <!-- Skin tone -->
+    <div class="pc-section">
+      <div class="pc-label">Skin tone</div>
+      <div class="pc-option-grid" id="skin-grid"></div>
     </div>
-    <div>
-      <div class="section-label"><span>🎨</span> Hair colour</div>
-      <div class="haircolor-row" id="hair-color-swatches"></div>
-      <div class="section-divider"></div>
+
+    <hr class="pc-divider" />
+
+    <!-- Hair colour tabs + hairstyle grid -->
+    <div class="pc-section">
+      <div class="pc-label">Hair colour</div>
+      <div class="pc-tabs" id="hair-color-tabs"></div>
+      <div class="pc-label">Hairstyle</div>
+      <div class="pc-option-grid" id="hair-grid"></div>
     </div>
-    <div>
-      <div class="section-label"><span>💇</span> Hairstyle</div>
-      <div class="thumb-grid" id="hair-grid"></div>
-      <div class="section-divider"></div>
+
+    <hr class="pc-divider" />
+
+    <!-- Outfit -->
+    <div class="pc-section">
+      <div class="pc-label">Outfit</div>
+      <div class="pc-option-grid" id="clothes-grid"></div>
     </div>
-    <div>
-      <div class="section-label"><span>👕</span> Outfit</div>
-      <div class="thumb-grid" id="clothes-grid"></div>
-      <div class="section-divider"></div>
+
+    <hr class="pc-divider" />
+
+    <!-- Accessory -->
+    <div class="pc-section">
+      <div class="pc-label">Accessory</div>
+      <div class="pc-option-grid" id="acc-grid"></div>
     </div>
-    <div>
-      <div class="section-label"><span>✨</span> Accessory</div>
-      <div class="thumb-grid" id="acc-grid"></div>
-      <div class="section-divider"></div>
+
+    <hr class="pc-divider" />
+
+    <!-- Background -->
+    <div class="pc-section">
+      <div class="pc-label">Background colour</div>
+      <div class="pc-swatch-row" id="bg-grid"></div>
     </div>
-    <div>
-      <div class="section-label"><span>✏️</span> Recipient name</div>
-      <input id="recipient-input" class="card-text-input" type="text" maxlength="30"
+
+    <hr class="pc-divider" />
+
+    <!-- Recipient name -->
+    <div class="pc-section">
+      <div class="pc-label">
+        Name of recipient
+        <span class="pc-label-count" id="recipient-count">0 / 30</span>
+      </div>
+      <input class="pc-text-input" id="recipient-input" type="text" maxlength="30"
         placeholder="e.g. Sophie"
         autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" />
-      <div class="section-divider"></div>
     </div>
-    <div>
-      <div class="section-label"><span>💌</span> Personal message</div>
-      <input id="message-input" class="card-text-input" type="text" maxlength="60"
+
+    <!-- Personal message -->
+    <div class="pc-section">
+      <div class="pc-label">
+        Personal message
+        <span class="pc-label-count" id="message-count">0 / 60</span>
+      </div>
+      <input class="pc-text-input" id="message-input" type="text" maxlength="60"
         placeholder="Gefeliciteerd!"
         autocomplete="off" autocorrect="off" spellcheck="false" />
-      <div class="section-divider"></div>
     </div>
-    <div>
-      <div class="section-label"><span>🖊️</span> Text colour</div>
-      <div class="namecolor-row" id="name-swatches"></div>
-      <div class="section-divider"></div>
+
+    <!-- Text colour -->
+    <div class="pc-section">
+      <div class="pc-label">Text colour</div>
+      <div class="pc-swatch-row" id="text-color-row"></div>
     </div>
-    <div>
-      <div class="section-label"><span>🌈</span> Background</div>
-      <div class="bgcolor-grid" id="bg-swatches"></div>
-      <div class="section-divider"></div>
-    </div>
-    <div style="height:20px"></div>
+
   </div>
 </div>
 
