@@ -351,11 +351,8 @@ async function exportCard() {
   saveBtn.textContent = "Getting ready…";
 
   try {
-    // Load fonts into canvas context first
-    await Promise.all([
-      new FontFace("Lora", "url(https://fonts.gstatic.com/s/lora/v32/0QI6MX1D_JOxE7fSWEf_rOM.woff2)", { weight: "400" }).load().then(f => document.fonts.add(f)).catch(() => {}),
-      new FontFace("De Lionist", "url(../De_Lionist.otf)").load().then(f => document.fonts.add(f)).catch(() => {}),
-    ]);
+    // Fonts are already embedded in the page via @font-face — wait for them to be ready
+    await document.fonts.ready;
 
     const canvas = document.createElement("canvas");
     canvas.width  = PRINT_W;
