@@ -47,50 +47,24 @@
       justify-content: space-between;
       flex-shrink: 0;
     }
-    .header-brand {
-      display: flex;
-      flex-direction: column;
-    }
-    .header-sub {
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--ink-faint);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-    .header-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-top: 1px;
-    }
+    .header-brand { display: flex; flex-direction: column; }
+    .header-sub { font-size: 9px; font-weight: 700; color: var(--ink-faint); letter-spacing: 0.14em; text-transform: uppercase; }
+    .header-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-top: 1px; }
     .header-actions { display: flex; gap: 8px; align-items: center; }
 
     .btn-ghost {
-      padding: 8px 16px;
-      border-radius: 20px;
-      border: 1.5px solid var(--border);
-      background: var(--white);
-      color: var(--ink-light);
-      font-size: 12px;
-      font-family: inherit;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
+      padding: 8px 16px; border-radius: 20px;
+      border: 1.5px solid var(--border); background: var(--white);
+      color: var(--ink-light); font-size: 12px; font-family: inherit; font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
     }
     .btn-ghost:hover { border-color: var(--blush-light); color: var(--blush); }
 
     .btn-primary {
-      padding: 8px 20px;
-      border-radius: 20px;
-      border: none;
-      background: var(--blush);
-      color: var(--white);
-      font-size: 12px;
-      font-family: inherit;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
+      padding: 8px 20px; border-radius: 20px; border: none;
+      background: var(--blush); color: var(--white);
+      font-size: 12px; font-family: inherit; font-weight: 700;
+      cursor: pointer; transition: background 0.15s;
     }
     .btn-primary:hover { background: var(--blush-dark); }
     .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
@@ -100,12 +74,9 @@
 
     /* ── Left: card preview ── */
     #preview-col {
-      width: 46%;
-      flex-shrink: 0;
+      width: 46%; flex-shrink: 0;
       background: #f0ebe7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       padding: 32px 24px;
     }
     #card-outer {
@@ -121,17 +92,14 @@
       overflow: hidden;
       transition: background 0.25s;
     }
-    #card-wrap > img,
-    #card-wrap > svg {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
+    #card-wrap > img, #card-wrap > svg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
     }
-    #layer-face, #layer-clothes, #layer-hair, #layer-acc { object-fit: contain; }
+    #layer-skin, #layer-outfit, #layer-hair, #layer-acc { object-fit: contain; }
 
     /* ── Right: options ── */
     #options-col {
-      width: 54%;
-      flex-shrink: 0;
+      width: 54%; flex-shrink: 0;
       overflow-y: auto;
       padding: 24px 28px 48px;
       background: var(--white);
@@ -139,43 +107,42 @@
     #options-col::-webkit-scrollbar { width: 4px; }
     #options-col::-webkit-scrollbar-thumb { background: var(--blush-light); border-radius: 4px; }
 
-    /* ── Section ── */
+    /* ── Sections ── */
     .pc-section { margin-bottom: 22px; }
     .pc-label {
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-faint); margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: space-between;
     }
     .pc-label-count { font-size: 10px; color: var(--ink-faint); }
     .pc-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 
-    /* ── Option grid (thumbnails) ── */
+    /* ── Circular swatches (skin tone + hair colour) ── */
+    .pc-swatch-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .pc-swatch {
+      width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      outline: 2px solid transparent;
+      transition: all 0.15s; flex-shrink: 0;
+    }
+    .pc-swatch:hover { transform: scale(1.1); }
+    .pc-swatch.selected { outline: 2px solid var(--blush); outline-offset: 3px; }
+
+    /* ── Thumbnail grid ── */
     .pc-option-grid { display: flex; flex-wrap: wrap; gap: 6px; }
     .pc-option-item {
-      cursor: pointer;
-      border-radius: var(--radius-sm);
-      border: 2px solid transparent;
-      overflow: hidden;
-      transition: all 0.15s;
-      background: var(--white);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 64px;
+      cursor: pointer; border-radius: var(--radius-sm);
+      border: 2px solid transparent; overflow: hidden;
+      transition: all 0.15s; background: var(--white); position: relative;
+      display: flex; flex-direction: column; align-items: center; width: 64px;
       user-select: none;
     }
     .pc-option-item:hover { border-color: var(--blush-light); }
     .pc-option-item.selected { border-color: var(--blush); }
     .pc-option-item.selected::after {
       content: ""; position: absolute; inset: 0;
-      background: rgba(232,137,122,0.10);
-      border-radius: 6px; pointer-events: none;
+      background: rgba(232,137,122,0.10); border-radius: 6px; pointer-events: none;
     }
     .pc-thumb {
       width: 64px; height: 96px;
@@ -183,83 +150,40 @@
       background: #f9f3ef;
     }
     .pc-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
-    .pc-thumb.placeholder { background: #f0e8e3; }
+    .pc-thumb.placeholder { background: #f0e8e3; color: var(--ink-faint); font-size: 20px; }
     .pc-option-label {
       font-size: 10px; text-align: center; padding: 3px;
       color: var(--ink-light);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;
     }
 
-    /* None button */
-    .pc-option-item.none-item .pc-thumb {
-      font-size: 20px; color: var(--ink-faint);
-    }
-
-    /* ── Colour swatches (hair, text colour, bg) ── */
-    .pc-swatch-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .pc-swatch {
-      width: 28px; height: 28px; border-radius: 50%;
-      cursor: pointer;
-      border: 3px solid transparent;
-      outline: 2px solid transparent;
-      transition: all 0.15s; flex-shrink: 0;
-    }
-    .pc-swatch:hover { transform: scale(1.12); }
-    .pc-swatch.selected { outline: 2px solid var(--blush); outline-offset: 3px; }
-
-    /* Text colour — "A" buttons */
-    .pc-text-swatch {
-      width: 32px; height: 32px;
-      border-radius: var(--radius-sm);
-      border: 1.5px solid var(--border);
-      background: var(--white);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; font-weight: 700;
-      font-family: system-ui;
-      transition: all 0.15s;
-    }
-    .pc-text-swatch.selected { border-color: var(--blush); box-shadow: 0 0 0 2px var(--blush-light); }
-
-    /* Background colour — small portrait-shaped rectangles */
+    /* ── Background swatches (portrait-shaped) ── */
+    .pc-bg-row { display: flex; gap: 8px; flex-wrap: wrap; }
     .pc-bg-item {
-      width: 40px; height: 60px;
-      border-radius: var(--radius-sm);
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: all 0.15s;
+      width: 40px; height: 60px; border-radius: var(--radius-sm);
+      border: 2px solid transparent; cursor: pointer; transition: all 0.15s;
     }
     .pc-bg-item:hover { border-color: var(--blush-light); }
     .pc-bg-item.selected { border-color: var(--blush); box-shadow: 0 0 0 2px var(--blush-light); }
 
-    /* ── Hair colour tabs ── */
-    .pc-tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-    .pc-tab {
-      padding: 5px 13px;
-      border-radius: 20px;
-      border: 1.5px solid var(--border);
-      background: var(--white);
-      color: var(--ink-light);
-      font-size: 11px;
-      font-family: inherit;
-      font-weight: 600;
-      cursor: pointer;
+    /* ── Text colour row ── */
+    .pc-text-color-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pc-text-swatch {
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border); background: var(--white);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; font-family: system-ui;
       transition: all 0.15s;
     }
-    .pc-tab:hover { border-color: var(--blush-light); }
-    .pc-tab.active { background: var(--blush); border-color: var(--blush); color: var(--white); }
+    .pc-text-swatch.selected { border-color: var(--blush); box-shadow: 0 0 0 2px var(--blush-light); }
 
     /* ── Text inputs ── */
     .pc-text-input {
       width: 100%; padding: 10px 13px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-family: system-ui;
-      background: var(--white);
-      color: var(--ink);
-      transition: border-color 0.15s;
-      outline: none;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 14px; font-family: system-ui;
+      background: var(--white); color: var(--ink);
+      transition: border-color 0.15s; outline: none;
     }
     .pc-text-input:focus { border-color: var(--blush); }
     .pc-char-count { font-size: 11px; color: var(--ink-faint); text-align: right; margin-top: 4px; }
@@ -267,7 +191,6 @@
 </head>
 <body>
 
-<!-- Header -->
 <div id="header">
   <div class="header-brand">
     <span class="header-sub">Portraits by Jun-Yi</span>
@@ -279,30 +202,25 @@
   </div>
 </div>
 
-<!-- Body -->
 <div id="body">
 
   <!-- Left: card preview -->
   <div id="preview-col">
     <div id="card-outer">
       <div id="card-wrap">
-        <img id="layer-clothes" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
-        <img id="layer-face"    style="display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" src="images/face-fair.png" />
-        <img id="layer-hair"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
-        <img id="layer-acc"     style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-skin"   style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-outfit" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-hair"   style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-acc"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
         <svg id="layer-text" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" xmlns="http://www.w3.org/2000/svg">
           <text id="recipient-text"
-            x="50%" y="76%"
-            text-anchor="middle" dominant-baseline="auto"
+            x="50%" y="76%" text-anchor="middle" dominant-baseline="auto"
             font-family="Lora, Georgia, serif" font-weight="400"
-            letter-spacing="2" fill="#2c2420"
-          ></text>
+            letter-spacing="2" fill="#2c2420"></text>
           <text id="message-text"
-            x="50%" y="87%"
-            text-anchor="middle" dominant-baseline="auto"
+            x="50%" y="87%" text-anchor="middle" dominant-baseline="auto"
             font-family="De Lionist, Georgia, serif" font-weight="400"
-            fill="#2c2420"
-          ></text>
+            fill="#2c2420"></text>
         </svg>
       </div>
     </div>
@@ -311,25 +229,25 @@
   <!-- Right: options -->
   <div id="options-col">
 
-    <!-- Skin tone -->
     <div class="pc-section">
       <div class="pc-label">Skin tone</div>
-      <div class="pc-option-grid" id="skin-grid"></div>
+      <div class="pc-swatch-row" id="skin-grid"></div>
     </div>
 
     <hr class="pc-divider" />
 
-    <!-- Hair colour tabs + hairstyle grid -->
     <div class="pc-section">
       <div class="pc-label">Hair colour</div>
-      <div class="pc-tabs" id="hair-color-tabs"></div>
+      <div class="pc-swatch-row" id="hair-color-grid"></div>
+    </div>
+
+    <div class="pc-section">
       <div class="pc-label">Hairstyle</div>
       <div class="pc-option-grid" id="hair-grid"></div>
     </div>
 
     <hr class="pc-divider" />
 
-    <!-- Outfit -->
     <div class="pc-section">
       <div class="pc-label">Outfit</div>
       <div class="pc-option-grid" id="clothes-grid"></div>
@@ -337,7 +255,6 @@
 
     <hr class="pc-divider" />
 
-    <!-- Accessory -->
     <div class="pc-section">
       <div class="pc-label">Accessory</div>
       <div class="pc-option-grid" id="acc-grid"></div>
@@ -345,15 +262,13 @@
 
     <hr class="pc-divider" />
 
-    <!-- Background -->
     <div class="pc-section">
       <div class="pc-label">Background colour</div>
-      <div class="pc-swatch-row" id="bg-grid"></div>
+      <div class="pc-bg-row" id="bg-grid"></div>
     </div>
 
     <hr class="pc-divider" />
 
-    <!-- Recipient name -->
     <div class="pc-section">
       <div class="pc-label">
         Name of recipient
@@ -364,7 +279,6 @@
         autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" />
     </div>
 
-    <!-- Personal message -->
     <div class="pc-section">
       <div class="pc-label">
         Personal message
@@ -375,10 +289,9 @@
         autocomplete="off" autocorrect="off" spellcheck="false" />
     </div>
 
-    <!-- Text colour -->
     <div class="pc-section">
       <div class="pc-label">Text colour</div>
-      <div class="pc-swatch-row" id="text-color-row"></div>
+      <div class="pc-text-color-row" id="text-color-row"></div>
     </div>
 
   </div>
