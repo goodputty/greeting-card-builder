@@ -4,10 +4,13 @@
 
 const BASE         = "images";
 const PREVIEWS     = BASE + "/00-previews";
+const GENDER_DIR   = BASE + "/01-gender";
 const SKINTONE_DIR = BASE + "/02-skintone";
 const HAIR_DIR     = BASE + "/03-hair";
+const GLASSES_DIR  = BASE + "/05-glasses";
 const OUTFITS_DIR  = BASE + "/06-outfits";
 const ACCS_DIR     = BASE + "/07-accessories";
+const WATERMARK_SRC = BASE + "/Watermark.jpg";
 
 function preview(filename) { return PREVIEWS + "/Preview-" + filename + ".png"; }
 
@@ -26,7 +29,7 @@ const DEFAULT_TEXT_COLOR = "#2c2420";
 
 const SKIN_TONES = [
   { id: "Fair",     color: "#f5d5b8" },
-  { id: "Tan",      color: "#c8956c" },
+  { id: "Tan",      color: "#d4956a" },
   { id: "Caramel",  color: "#a0622a" },
   { id: "Chestnut", color: "#6b3a1f" },
 ];
@@ -39,11 +42,14 @@ const HAIR_COLORS = [
   { id: "Grey",   color: "#8a8a8a" },
 ];
 
-const HAIRSTYLES = ["Bob", "Middle Part", "Loose", "Wavy", "Elegant"];
+const HAIRSTYLES = {
+  Female: ["Bob", "Middle Part", "Loose", "Wavy", "Elegant"],
+  Male:   ["Middle Part", "Tousled", "Sleek", "Classic", "Curls"],
+};
 
 const OUTFITS = ["Smart", "Shimmery", "Striped", "Blazer", "Casual"];
 
-const ACCESSORIES = ["Balloons", "Gift Box", "Champagne", "None"];
+const ACCESSORIES = ["None", "Balloons", "Gift Box", "Champagne"];
 
 const PRINT_W = 874;
 const PRINT_H = 1240;
@@ -51,10 +57,10 @@ const PRINT_H = 1240;
 // ═══════════════════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════════════════
-const WATERMARK_SRC = "images/Watermark.jpg";
-
 const state = {
+  gender:    "Female",
   skin:      "Fair",
+  glasses:   false,
   hairColor: "Black",
   hair:      "Bob",
   outfit:    "Smart",
@@ -65,17 +71,20 @@ const state = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
-// ASSET PATHS
+// ASSET PATHS — all driven by state.gender
 // ═══════════════════════════════════════════════════════════════════════════
-function skinSrc(skin)   { return SKINTONE_DIR + "/Female-Birthday-Skintone-" + skin + ".png"; }
-function hairSrc(c, s)   { return HAIR_DIR     + "/Female-Birthday-" + c + "-" + s + ".png"; }
-function outfitSrc(o)    { return OUTFITS_DIR  + "/Female-Birthday-" + o + ".png"; }
-function accSrc(a)       { return ACCS_DIR     + "/Female-Birthday-" + a + ".png"; }
+function g()             { return state.gender; }
+function skinSrc()       { return SKINTONE_DIR + "/" + g() + "-Birthday-Skintone-" + state.skin + ".png"; }
+function hairSrc()       { return HAIR_DIR     + "/" + g() + "-Birthday-" + state.hairColor + "-" + state.hair + ".png"; }
+function glassesSrc()    { return GLASSES_DIR  + "/" + g() + "-Birthday-Glasses.png"; }
+function outfitSrc()     { return OUTFITS_DIR  + "/" + g() + "-Birthday-" + state.outfit + ".png"; }
+function accSrc()        { return ACCS_DIR     + "/" + g() + "-Birthday-" + state.accessory + ".png"; }
 
-function skinPreview(skin)  { return preview("Female-Birthday-Skintone-" + skin); }
-function hairPreview(c, s)  { return preview("Female-Birthday-" + c + "-" + s); }
-function outfitPreview(o)   { return preview("Female-Birthday-" + o); }
-function accPreview(a)      { return preview("Female-Birthday-" + a); }
+function skinPreview(s)  { return preview(g() + "-Birthday-Skintone-" + s); }
+function hairPreview(c, s) { return preview(g() + "-Birthday-" + c + "-" + s); }
+function outfitPreview(o){ return preview(g() + "-Birthday-" + o); }
+function accPreview(a)   { return preview(g() + "-Birthday-" + a); }
+function genderPreview(gen) { return GENDER_DIR + "/Birthday-" + gen + ".png"; }
 
 // ═══════════════════════════════════════════════════════════════════════════
 // DOM REFS
@@ -84,6 +93,7 @@ const cardWrap       = document.getElementById("card-wrap");
 const layerSkin      = document.getElementById("layer-skin");
 const layerOutfit    = document.getElementById("layer-outfit");
 const layerHair      = document.getElementById("layer-hair");
+const layerGlasses   = document.getElementById("layer-glasses");
 const layerAcc       = document.getElementById("layer-acc");
 const recipientText  = document.getElementById("recipient-text");
 const messageText    = document.getElementById("message-text");
@@ -91,6 +101,8 @@ const recipientInput = document.getElementById("recipient-input");
 const messageInput   = document.getElementById("message-input");
 const recipientCount = document.getElementById("recipient-count");
 const messageCount   = document.getElementById("message-count");
+const glassesToggle  = document.getElementById("glasses-toggle");
+const glassesLabel   = document.getElementById("glasses-label");
 const saveBtn        = document.getElementById("save-btn");
 const resetBtn       = document.getElementById("reset-btn");
 
@@ -103,12 +115,18 @@ function render() {
   cardWrap.style.backgroundSize = "cover";
   cardWrap.style.backgroundPosition = "center";
 
-  setLayer(layerSkin,   skinSrc(state.skin));
-  setLayer(layerOutfit, outfitSrc(state.outfit));
-  setLayer(layerHair,   hairSrc(state.hairColor, state.hair));
+  setLayer(layerSkin,   skinSrc());
+  setLayer(layerOutfit, outfitSrc());
+  setLayer(layerHair,   hairSrc());
+
+  if (state.glasses) {
+    setLayer(layerGlasses, glassesSrc());
+  } else {
+    layerGlasses.style.display = "none";
+  }
 
   if (state.accessory !== "None") {
-    setLayer(layerAcc, accSrc(state.accessory));
+    setLayer(layerAcc, accSrc());
   } else {
     layerAcc.style.display = "none";
   }
@@ -148,7 +166,47 @@ function fitSvgText(el, container, startRatio, minRatio) {
 // BUILD UI COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════════
 
-// Circular colour swatches (skin tone + hair colour)
+// Gender thumbnails
+function buildGenderGrid() {
+  const container = document.getElementById("gender-grid");
+  container.innerHTML = "";
+  ["Female", "Male"].forEach(gen => {
+    const el = document.createElement("div");
+    el.className = "pc-option-item" + (state.gender === gen ? " selected" : "");
+    el.dataset.id = gen;
+
+    const thumb = document.createElement("div");
+    thumb.className = "pc-thumb";
+    const img = document.createElement("img");
+    img.src = genderPreview(gen); img.alt = gen;
+    img.onerror = () => { thumb.classList.add("placeholder"); img.remove(); };
+    thumb.appendChild(img);
+    el.appendChild(thumb);
+
+    const label = document.createElement("div");
+    label.className = "pc-option-label";
+    label.textContent = gen;
+    el.appendChild(label);
+
+    el.addEventListener("click", () => {
+      state.gender = gen;
+      // Reset hair to first style for new gender
+      state.hair = HAIRSTYLES[gen][0];
+      render();
+      // Rebuild all gender-dependent sections
+      buildGenderGrid();
+      buildThumbGrid("hair-grid", HAIRSTYLES[gen], () => state.hair,
+        v => { state.hair = v; }, s => hairPreview(state.hairColor, s));
+      buildThumbGrid("clothes-grid", OUTFITS, () => state.outfit,
+        v => { state.outfit = v; }, o => outfitPreview(o));
+      buildThumbGrid("acc-grid", ACCESSORIES, () => state.accessory,
+        v => { state.accessory = v; }, a => a === "None" ? null : accPreview(a));
+    });
+    container.appendChild(el);
+  });
+}
+
+// Circular swatches (skin tone + hair colour)
 function buildSwatchRow(containerId, items, getSelected, onSelect) {
   const container = document.getElementById(containerId);
   container.innerHTML = "";
@@ -158,9 +216,6 @@ function buildSwatchRow(containerId, items, getSelected, onSelect) {
     el.dataset.id = item.id;
     el.style.background = item.color;
     el.title = item.id;
-    if (item.color === "#FFFFFF" || item.color === "#f5d5b8") {
-      el.style.border = "2px solid #e8ddd8";
-    }
     el.addEventListener("click", () => {
       onSelect(item.id);
       container.querySelectorAll(".pc-swatch").forEach(s => s.classList.toggle("selected", s.dataset.id === getSelected()));
@@ -175,10 +230,9 @@ function buildThumbGrid(containerId, items, getSelected, onSelect, previewFn) {
   container.innerHTML = "";
   items.forEach(item => {
     const isNone = item === "None";
-    const id = isNone ? "None" : item;
     const el = document.createElement("div");
-    el.className = "pc-option-item" + (getSelected() === id ? " selected" : "");
-    el.dataset.id = id;
+    el.className = "pc-option-item" + (getSelected() === item ? " selected" : "");
+    el.dataset.id = item;
 
     const thumb = document.createElement("div");
     thumb.className = "pc-thumb" + (isNone ? " placeholder" : "");
@@ -187,8 +241,7 @@ function buildThumbGrid(containerId, items, getSelected, onSelect, previewFn) {
       thumb.textContent = "✕";
     } else {
       const img = document.createElement("img");
-      img.src = previewFn(item);
-      img.alt = item;
+      img.src = previewFn(item); img.alt = item;
       img.onerror = () => { thumb.classList.add("placeholder"); img.remove(); };
       thumb.appendChild(img);
     }
@@ -196,31 +249,12 @@ function buildThumbGrid(containerId, items, getSelected, onSelect, previewFn) {
 
     const label = document.createElement("div");
     label.className = "pc-option-label";
-    label.textContent = id;
+    label.textContent = item;
     el.appendChild(label);
 
     el.addEventListener("click", () => {
-      onSelect(id); render();
+      onSelect(item); render();
       container.querySelectorAll(".pc-option-item").forEach(e => e.classList.toggle("selected", e.dataset.id === getSelected()));
-    });
-    container.appendChild(el);
-  });
-}
-
-// Background swatches
-function buildBgRow(containerId, colors, getSelected, onSelect) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-  colors.forEach(c => {
-    const el = document.createElement("div");
-    el.className = "pc-bg-item" + (getSelected() === c.hex ? " selected" : "");
-    el.dataset.hex = c.hex;
-    el.style.background = c.hex;
-    el.title = c.label;
-    if (c.hex === "#FFFFFF") el.style.borderColor = "#e8ddd8";
-    el.addEventListener("click", () => {
-      onSelect(c.hex); render();
-      container.querySelectorAll(".pc-bg-item").forEach(e => e.classList.toggle("selected", e.dataset.hex === getSelected()));
     });
     container.appendChild(el);
   });
@@ -246,6 +280,17 @@ function buildTextColorRow(containerId, getSelected, onSelect) {
   });
 }
 
+// Glasses toggle
+function initGlassesToggle() {
+  glassesToggle.checked = state.glasses;
+  glassesLabel.textContent = state.glasses ? "Yes" : "No";
+  glassesToggle.addEventListener("change", () => {
+    state.glasses = glassesToggle.checked;
+    glassesLabel.textContent = state.glasses ? "Yes" : "No";
+    render();
+  });
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // EXPORT
 // ═══════════════════════════════════════════════════════════════════════════
@@ -268,10 +313,11 @@ async function exportCard() {
     });
 
     await drawImg(WATERMARK_SRC);
-    await drawImg(skinSrc(state.skin));
-    await drawImg(outfitSrc(state.outfit));
-    await drawImg(hairSrc(state.hairColor, state.hair));
-    if (state.accessory !== "None") await drawImg(accSrc(state.accessory));
+    await drawImg(skinSrc());
+    await drawImg(outfitSrc());
+    await drawImg(hairSrc());
+    if (state.glasses) await drawImg(glassesSrc());
+    if (state.accessory !== "None") await drawImg(accSrc());
 
     const maxW = PRINT_W * 0.82;
     ctx.textAlign = "center";
@@ -340,7 +386,9 @@ if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").ca
 // RESET
 // ═══════════════════════════════════════════════════════════════════════════
 function resetApp() {
+  state.gender    = "Female";
   state.skin      = "Fair";
+  state.glasses   = false;
   state.hairColor = "Black";
   state.hair      = "Bob";
   state.outfit    = "Smart";
@@ -359,38 +407,34 @@ function resetApp() {
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
 function init() {
-  // Skin tone — circular swatches
+  buildGenderGrid();
+
   buildSwatchRow("skin-grid", SKIN_TONES, () => state.skin, v => {
     state.skin = v; render();
+    document.getElementById("skin-grid").querySelectorAll(".pc-swatch")
+      .forEach(s => s.classList.toggle("selected", s.dataset.id === state.skin));
   });
 
-  // Hair colour — circular swatches
+  initGlassesToggle();
+
   buildSwatchRow("hair-color-grid", HAIR_COLORS, () => state.hairColor, v => {
     state.hairColor = v;
-    // Keep current style if it exists for new colour, else default to first
     render();
-    buildThumbGrid("hair-grid", HAIRSTYLES, () => state.hair, v => { state.hair = v; },
-      s => hairPreview(state.hairColor, s));
+    buildThumbGrid("hair-grid", HAIRSTYLES[state.gender], () => state.hair,
+      s => { state.hair = s; }, s => hairPreview(state.hairColor, s));
   });
 
-  // Hairstyle thumbnails
-  buildThumbGrid("hair-grid", HAIRSTYLES, () => state.hair, v => { state.hair = v; },
-    s => hairPreview(state.hairColor, s));
+  buildThumbGrid("hair-grid", HAIRSTYLES[state.gender], () => state.hair,
+    v => { state.hair = v; }, s => hairPreview(state.hairColor, s));
 
-  // Outfit thumbnails
-  buildThumbGrid("clothes-grid", OUTFITS, () => state.outfit, v => { state.outfit = v; },
-    o => outfitPreview(o));
+  buildThumbGrid("clothes-grid", OUTFITS, () => state.outfit,
+    v => { state.outfit = v; }, o => outfitPreview(o));
 
-  // Accessory thumbnails (includes None)
-  buildThumbGrid("acc-grid", ACCESSORIES, () => state.accessory, v => { state.accessory = v; },
-    a => a === "None" ? null : accPreview(a));
+  buildThumbGrid("acc-grid", ACCESSORIES, () => state.accessory,
+    v => { state.accessory = v; }, a => a === "None" ? null : accPreview(a));
 
-  // Background
-
-  // Text colour
   buildTextColorRow("text-color-row", () => state.textColor, v => { state.textColor = v; });
 
-  // Text inputs
   recipientInput.value = state.recipient;
   recipientInput.addEventListener("input", () => {
     state.recipient = recipientInput.value;

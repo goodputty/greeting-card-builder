@@ -42,9 +42,7 @@
       background: var(--white);
       border-bottom: 1px solid var(--border);
       padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       flex-shrink: 0;
     }
     .header-brand { display: flex; flex-direction: column; }
@@ -76,26 +74,30 @@
     #preview-col {
       width: 46%; flex-shrink: 0;
       background: #f0ebe7;
-      display: flex; align-items: center; justify-content: center;
-      padding: 32px 24px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 32px 24px 16px;
+      gap: 12px;
     }
     #card-outer {
       width: 100%;
-      max-width: calc((100vh - 57px - 64px) * 2 / 3);
+      max-width: calc((100vh - 57px - 80px) * 2 / 3);
       aspect-ratio: 2 / 3;
       position: relative;
       filter: drop-shadow(0 8px 32px rgba(44,36,32,0.18));
     }
     #card-wrap {
       position: absolute; inset: 0;
-      border-radius: var(--radius);
-      overflow: hidden;
+      border-radius: var(--radius); overflow: hidden;
       transition: background 0.25s;
     }
     #card-wrap > img, #card-wrap > svg {
       position: absolute; inset: 0; width: 100%; height: 100%;
     }
-    #layer-skin, #layer-outfit, #layer-hair, #layer-acc { object-fit: contain; }
+    #layer-skin, #layer-outfit, #layer-hair, #layer-glasses, #layer-acc { object-fit: contain; }
+    #preview-note {
+      font-size: 11px; color: var(--ink-faint); font-style: italic; text-align: center;
+    }
 
     /* ── Right: options ── */
     #options-col {
@@ -117,54 +119,66 @@
     .pc-label-count { font-size: 10px; color: var(--ink-faint); }
     .pc-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 
-    /* ── Circular swatches (skin tone + hair colour) ── */
-    .pc-swatch-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .pc-swatch {
-      width: 32px; height: 32px; border-radius: 50%;
-      cursor: pointer;
-      border: 3px solid transparent;
-      outline: 2px solid transparent;
-      transition: all 0.15s; flex-shrink: 0;
-    }
-    .pc-swatch:hover { transform: scale(1.1); }
-    .pc-swatch.selected { outline: 2px solid var(--blush); outline-offset: 3px; }
-
     /* ── Thumbnail grid ── */
     .pc-option-grid { display: flex; flex-wrap: wrap; gap: 6px; }
     .pc-option-item {
       cursor: pointer; border-radius: var(--radius-sm);
-      border: 2px solid transparent; overflow: hidden;
-      transition: all 0.15s; background: var(--white); position: relative;
-      display: flex; flex-direction: column; align-items: center; width: 64px;
+      border: 2px solid var(--border); overflow: hidden;
+      transition: all 0.15s; background: var(--bg); position: relative;
+      display: flex; flex-direction: column; align-items: center; width: 80px;
       user-select: none;
     }
     .pc-option-item:hover { border-color: var(--blush-light); }
     .pc-option-item.selected { border-color: var(--blush); }
     .pc-option-item.selected::after {
       content: ""; position: absolute; inset: 0;
-      background: rgba(232,137,122,0.10); border-radius: 6px; pointer-events: none;
+      background: rgba(232,137,122,0.08); border-radius: 6px; pointer-events: none;
     }
     .pc-thumb {
-      width: 64px; height: 96px;
+      width: 80px; height: 120px;
       display: flex; align-items: center; justify-content: center;
-      background: #f9f3ef;
+      background: #f9f3ef; overflow: hidden;
     }
     .pc-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
-    .pc-thumb.placeholder { background: #f0e8e3; color: var(--ink-faint); font-size: 20px; }
+    .pc-thumb.placeholder { background: #f0e8e3; color: var(--ink-faint); font-size: 22px; }
     .pc-option-label {
-      font-size: 10px; text-align: center; padding: 3px;
+      font-size: 10px; text-align: center; padding: 4px 2px;
       color: var(--ink-light);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;
     }
 
-    /* ── Background swatches (portrait-shaped) ── */
-    .pc-bg-row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .pc-bg-item {
-      width: 40px; height: 60px; border-radius: var(--radius-sm);
-      border: 2px solid transparent; cursor: pointer; transition: all 0.15s;
+    /* ── Circular swatches ── */
+    .pc-swatch-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .pc-swatch {
+      width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer; border: 2.5px solid transparent;
+      outline: 2px solid transparent; outline-offset: 3px;
+      transition: all 0.15s; flex-shrink: 0;
     }
-    .pc-bg-item:hover { border-color: var(--blush-light); }
-    .pc-bg-item.selected { border-color: var(--blush); box-shadow: 0 0 0 2px var(--blush-light); }
+    .pc-swatch:hover { transform: scale(1.1); }
+    .pc-swatch.selected { outline-color: var(--blush); }
+
+    /* ── Glasses toggle ── */
+    .pc-toggle-row { display: flex; align-items: center; gap: 12px; }
+    .toggle-switch {
+      position: relative; width: 44px; height: 24px; flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: var(--border); border-radius: 24px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .toggle-track::before {
+      content: ""; position: absolute;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--white); left: 3px; top: 3px;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .toggle-switch input:checked + .toggle-track { background: var(--blush); }
+    .toggle-switch input:checked + .toggle-track::before { transform: translateX(20px); }
+    .toggle-label { font-size: 13px; color: var(--ink-light); font-weight: 500; }
 
     /* ── Text colour row ── */
     .pc-text-color-row { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -186,7 +200,6 @@
       transition: border-color 0.15s; outline: none;
     }
     .pc-text-input:focus { border-color: var(--blush); }
-    .pc-char-count { font-size: 11px; color: var(--ink-faint); text-align: right; margin-top: 4px; }
   </style>
 </head>
 <body>
@@ -208,10 +221,11 @@
   <div id="preview-col">
     <div id="card-outer">
       <div id="card-wrap">
-        <img id="layer-skin"   style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
-        <img id="layer-outfit" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
-        <img id="layer-hair"   style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
-        <img id="layer-acc"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-skin"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-outfit"  style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-hair"    style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-glasses" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
+        <img id="layer-acc"     style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;" alt="" />
         <svg id="layer-text" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" xmlns="http://www.w3.org/2000/svg">
           <text id="recipient-text"
             x="50%" y="76%" text-anchor="middle" dominant-baseline="auto"
@@ -224,14 +238,35 @@
         </svg>
       </div>
     </div>
+    <div id="preview-note">Preview only — watermark removed on your final card</div>
   </div>
 
   <!-- Right: options -->
   <div id="options-col">
 
     <div class="pc-section">
+      <div class="pc-label">Gender</div>
+      <div class="pc-option-grid" id="gender-grid"></div>
+    </div>
+
+    <hr class="pc-divider" />
+
+    <div class="pc-section">
       <div class="pc-label">Skin tone</div>
       <div class="pc-swatch-row" id="skin-grid"></div>
+    </div>
+
+    <hr class="pc-divider" />
+
+    <div class="pc-section">
+      <div class="pc-label">Glasses</div>
+      <div class="pc-toggle-row">
+        <label class="toggle-switch">
+          <input type="checkbox" id="glasses-toggle" />
+          <div class="toggle-track"></div>
+        </label>
+        <span class="toggle-label" id="glasses-label">No</span>
+      </div>
     </div>
 
     <hr class="pc-divider" />
@@ -278,7 +313,7 @@
         <span class="pc-label-count" id="message-count">0 / 60</span>
       </div>
       <input class="pc-text-input" id="message-input" type="text" maxlength="60"
-        placeholder="Gefeliciteerd!"
+        placeholder="e.g. Happy Birthday!"
         autocomplete="off" autocorrect="off" spellcheck="false" />
     </div>
 
