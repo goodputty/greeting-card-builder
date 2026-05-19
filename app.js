@@ -51,8 +51,9 @@ const PRINT_H = 1240;
 // ═══════════════════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════════════════
+const WATERMARK_SRC = "images/Watermark.jpg";
+
 const state = {
-  bgColor:   "#f6d1cb",
   skin:      "Fair",
   hairColor: "Black",
   hair:      "Bob",
@@ -97,7 +98,10 @@ const resetBtn       = document.getElementById("reset-btn");
 // RENDER
 // ═══════════════════════════════════════════════════════════════════════════
 function render() {
-  cardWrap.style.background = state.bgColor;
+  cardWrap.style.background = "#fdfaf8";
+  cardWrap.style.backgroundImage = "url(" + WATERMARK_SRC + ")";
+  cardWrap.style.backgroundSize = "cover";
+  cardWrap.style.backgroundPosition = "center";
 
   setLayer(layerSkin,   skinSrc(state.skin));
   setLayer(layerOutfit, outfitSrc(state.outfit));
@@ -254,9 +258,6 @@ async function exportCard() {
     canvas.width = PRINT_W; canvas.height = PRINT_H;
     const ctx = canvas.getContext("2d");
 
-    ctx.fillStyle = state.bgColor;
-    ctx.fillRect(0, 0, PRINT_W, PRINT_H);
-
     const drawImg = src => new Promise(resolve => {
       if (!src) return resolve();
       const img = new Image();
@@ -266,6 +267,7 @@ async function exportCard() {
       img.src = src;
     });
 
+    await drawImg(WATERMARK_SRC);
     await drawImg(skinSrc(state.skin));
     await drawImg(outfitSrc(state.outfit));
     await drawImg(hairSrc(state.hairColor, state.hair));
@@ -338,7 +340,6 @@ if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").ca
 // RESET
 // ═══════════════════════════════════════════════════════════════════════════
 function resetApp() {
-  state.bgColor   = "#f6d1cb";
   state.skin      = "Fair";
   state.hairColor = "Black";
   state.hair      = "Bob";
@@ -385,7 +386,6 @@ function init() {
     a => a === "None" ? null : accPreview(a));
 
   // Background
-  buildBgRow("bg-grid", BRAND_COLORS, () => state.bgColor, v => { state.bgColor = v; });
 
   // Text colour
   buildTextColorRow("text-color-row", () => state.textColor, v => { state.textColor = v; });
