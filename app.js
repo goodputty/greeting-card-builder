@@ -2,12 +2,12 @@
 // ★ CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════
 
-const BASE       = "images";
-const PREVIEWS   = BASE + "/00-previews";
-const SKINTONE   = BASE + "/02-skintone";
-const HAIR       = BASE + "/03-hair";
-const OUTFITS    = BASE + "/06-outfits";
-const ACCS       = BASE + "/07-accessories";
+const BASE         = "images";
+const PREVIEWS     = BASE + "/00-previews";
+const SKINTONE_DIR = BASE + "/02-skintone";
+const HAIR_DIR     = BASE + "/03-hair";
+const OUTFITS_DIR  = BASE + "/06-outfits";
+const ACCS_DIR     = BASE + "/07-accessories";
 
 function preview(filename) { return PREVIEWS + "/Preview-" + filename + ".png"; }
 
@@ -66,10 +66,10 @@ const state = {
 // ═══════════════════════════════════════════════════════════════════════════
 // ASSET PATHS
 // ═══════════════════════════════════════════════════════════════════════════
-function skinSrc(skin)   { return SKINTONE  + "/Female-Birthday-Skintone-" + skin + ".png"; }
-function hairSrc(c, s)   { return HAIR      + "/Female-Birthday-" + c + "-" + s + ".png"; }
-function outfitSrc(o)    { return OUTFITS   + "/Female-Birthday-" + o + ".png"; }
-function accSrc(a)       { return ACCS      + "/Female-Birthday-" + a + ".png"; }
+function skinSrc(skin)   { return SKINTONE_DIR + "/Female-Birthday-Skintone-" + skin + ".png"; }
+function hairSrc(c, s)   { return HAIR_DIR     + "/Female-Birthday-" + c + "-" + s + ".png"; }
+function outfitSrc(o)    { return OUTFITS_DIR  + "/Female-Birthday-" + o + ".png"; }
+function accSrc(a)       { return ACCS_DIR     + "/Female-Birthday-" + a + ".png"; }
 
 function skinPreview(skin)  { return preview("Female-Birthday-Skintone-" + skin); }
 function hairPreview(c, s)  { return preview("Female-Birthday-" + c + "-" + s); }
