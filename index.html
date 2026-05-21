@@ -135,8 +135,9 @@
       content: ""; position: absolute; inset: 0;
       background: rgba(232,137,122,0.06); border-radius: 10px; pointer-events: none;
     }
+    /* Default thumb: square */
     .pc-thumb {
-      width: 100%; aspect-ratio: 2 / 3;
+      width: 100%; aspect-ratio: 1 / 1;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden; background: #f9f3ef;
     }
@@ -147,6 +148,8 @@
       color: var(--ink-light); font-weight: 500;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;
     }
+    /* Gender thumbnails: portrait 2:3 */
+    #gender-grid .pc-thumb { aspect-ratio: 2 / 3; }
 
     /* ── Circular swatches ── */
     .pc-swatch-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
