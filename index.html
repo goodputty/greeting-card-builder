@@ -120,36 +120,39 @@
     .pc-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 
     /* ── Thumbnail grid ── */
-    .pc-option-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pc-option-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    /* Default option item — hair, outfit, accessory */
     .pc-option-item {
-      cursor: pointer; border-radius: 12px;
+      cursor: pointer; border-radius: 10px;
       border: 2px solid var(--border); overflow: hidden;
       transition: all 0.15s; background: #f9f3ef; position: relative;
       display: flex; flex-direction: column; align-items: center;
-      width: 100px;
+      width: 68px;
       user-select: none;
     }
     .pc-option-item:hover { border-color: var(--blush-light); }
     .pc-option-item.selected { border-color: var(--blush); background: #fef6f4; }
     .pc-option-item.selected::after {
       content: ""; position: absolute; inset: 0;
-      background: rgba(232,137,122,0.06); border-radius: 10px; pointer-events: none;
+      background: rgba(232,137,122,0.06); border-radius: 8px; pointer-events: none;
     }
-    /* Default thumb: square */
     .pc-thumb {
-      width: 100%; aspect-ratio: 1 / 1;
+      width: 68px; height: 68px;
       display: flex; align-items: center; justify-content: center;
-      overflow: hidden; background: #f9f3ef;
+      overflow: hidden; background: #f9f3ef; flex-shrink: 0;
     }
     .pc-thumb img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
-    .pc-thumb.placeholder { color: var(--ink-faint); font-size: 22px; }
+    .pc-thumb.placeholder { color: var(--ink-faint); font-size: 20px; }
     .pc-option-label {
-      font-size: 11px; text-align: center; padding: 6px 4px;
+      font-size: 10px; text-align: center; padding: 4px 2px;
       color: var(--ink-light); font-weight: 500;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;
     }
-    /* Gender thumbnails: portrait 2:3 */
-    #gender-grid .pc-thumb { aspect-ratio: 2 / 3; }
+
+    /* Gender thumbnails — slightly wider, portrait ratio */
+    #gender-grid .pc-option-item { width: 100px; }
+    #gender-grid .pc-thumb { width: 100px; height: 130px; }
 
     /* ── Circular swatches ── */
     .pc-swatch-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
