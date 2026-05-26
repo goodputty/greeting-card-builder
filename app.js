@@ -43,8 +43,8 @@ const HAIR_COLORS = [
 ];
 
 const HAIRSTYLES = {
-  Female: ["Bob", "Middle Part", "Loose", "Wavy", "Elegant"],
-  Male:   ["Middle Part", "Tousled", "Sleek", "Classic", "Curls"],
+  Female: ["Bob", "Loose", "Wavy", "Elegant", "None"],
+  Male:   ["Tousled", "Sleek", "Classic", "Curls", "None"],
 };
 
 const OUTFITS = ["Smart", "Shimmery", "Striped", "Blazer", "Casual"];
@@ -75,13 +75,13 @@ const state = {
 // ═══════════════════════════════════════════════════════════════════════════
 function g()             { return state.gender; }
 function skinSrc()       { return SKINTONE_DIR + "/" + g() + "-Birthday-Skintone-" + state.skin + ".png"; }
-function hairSrc()       { return HAIR_DIR     + "/" + g() + "-Birthday-" + state.hairColor + "-" + state.hair + ".png"; }
-function glassesSrc()    { return GLASSES_DIR  + "/" + g() + "-Birthday-Glasses.png"; }
+function hairSrc()       { return HAIR_DIR     + "/" + g() + "-Birthday-" + state.hairColor + "-" + state.hair.replace(/ /g, "-") + ".png"; }
+function glassesSrc()    { return GLASSES_DIR  + "/" + g() + "-Glasses-Birthday-Adult.png"; }
 function outfitSrc()     { return OUTFITS_DIR  + "/" + g() + "-Birthday-" + state.outfit + ".png"; }
 function accSrc()        { return ACCS_DIR     + "/" + g() + "-Birthday-" + state.accessory + ".png"; }
 
 function skinPreview(s)  { return preview(g() + "-Birthday-Skintone-" + s); }
-function hairPreview(c, s) { return preview(g() + "-Birthday-" + c + "-" + s); }
+function hairPreview(c, s) { return preview(g() + "-Birthday-" + c + "-" + s.replace(/ /g, "-")); }
 function outfitPreview(o){ return preview(g() + "-Birthday-" + o); }
 function accPreview(a)   { return preview(g() + "-Birthday-" + a); }
 function genderPreview(gen) { return GENDER_DIR + "/Birthday-" + gen + ".png"; }
@@ -117,7 +117,11 @@ function render() {
 
   setLayer(layerSkin,   skinSrc());
   setLayer(layerOutfit, outfitSrc());
-  setLayer(layerHair,   hairSrc());
+  if (state.hair !== "None") {
+    setLayer(layerHair, hairSrc());
+  } else {
+    layerHair.style.display = "none";
+  }
 
   if (state.glasses) {
     setLayer(layerGlasses, glassesSrc());
@@ -315,7 +319,7 @@ async function exportCard() {
     await drawImg(WATERMARK_SRC);
     await drawImg(skinSrc());
     await drawImg(outfitSrc());
-    await drawImg(hairSrc());
+    if (state.hair !== "None") await drawImg(hairSrc());
     if (state.glasses) await drawImg(glassesSrc());
     if (state.accessory !== "None") await drawImg(accSrc());
 
@@ -390,7 +394,7 @@ function resetApp() {
   state.skin      = "Fair";
   state.glasses   = false;
   state.hairColor = "Black";
-  state.hair      = "Bob";
+  state.hair      = HAIRSTYLES[state.gender][0];
   state.outfit    = "Smart";
   state.accessory = "None";
   state.recipient = "";
