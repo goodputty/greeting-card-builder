@@ -285,14 +285,18 @@ function buildTextColorRow(containerId, getSelected, onSelect) {
 }
 
 // Glasses toggle
+let glassesListenerAdded = false;
 function initGlassesToggle() {
   glassesToggle.checked = state.glasses;
   glassesLabel.textContent = state.glasses ? "Yes" : "No";
-  glassesToggle.addEventListener("change", () => {
-    state.glasses = glassesToggle.checked;
-    glassesLabel.textContent = state.glasses ? "Yes" : "No";
-    render();
-  });
+  if (!glassesListenerAdded) {
+    glassesToggle.addEventListener("change", () => {
+      state.glasses = glassesToggle.checked;
+      glassesLabel.textContent = state.glasses ? "Yes" : "No";
+      render();
+    });
+    glassesListenerAdded = true;
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -436,8 +440,6 @@ function init() {
 
   buildThumbGrid("acc-grid", ACCESSORIES, () => state.accessory,
     v => { state.accessory = v; }, a => a === "None" ? null : accPreview(a));
-
-  buildTextColorRow("text-color-row", () => state.textColor, v => { state.textColor = v; });
 
   recipientInput.value = state.recipient;
   recipientInput.addEventListener("input", () => {
