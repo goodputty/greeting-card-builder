@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const BASE         = "images";
-const PREVIEWS     = BASE + "/00-previews";
+const PREVIEWS     = "00-previews";
 const GENDER_DIR   = BASE + "/01-gender";
 const SKINTONE_DIR = BASE + "/02-skintone";
 const HAIR_DIR     = BASE + "/03-hair";
