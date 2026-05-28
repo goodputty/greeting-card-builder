@@ -1,4 +1,4 @@
-// v1779978243
+// v1779979106
 // ═══════════════════════════════════════════════════════════════════════════
 // ★ CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════
@@ -51,7 +51,7 @@ const HAIRSTYLES = {
 const FEMALE_OUTFITS = ["Smart", "Shimmery", "Striped", "Blazer", "Casual"];
 const MALE_OUTFITS   = ["Layered", "Skater", "Plaid", "Relaxed", "Smart"];
 
-const ACCESSORIES = ["None", "Balloon", "Gift-Box", "Champagne-Glass"];
+const ACCESSORIES = ["Balloon", "Gift-Box", "Champagne-Glass", "None"];
 
 const PRINT_W = 874;
 const PRINT_H = 1240;
@@ -66,7 +66,7 @@ const state = {
   hairColor: "Black",
   hair:      "Bob",
   outfit:    "Smart",
-  accessory: "None",
+  accessory: "Balloon",
   recipient: "",
   message:   "",
   textColor: DEFAULT_TEXT_COLOR,
@@ -403,7 +403,7 @@ function resetApp() {
   state.hairColor = "Black";
   state.hair      = HAIRSTYLES[state.gender][0];
   state.outfit    = "Smart";
-  state.accessory = "None";
+  state.accessory = "Balloon";
   state.recipient = "";
   state.message   = "";
   state.textColor = DEFAULT_TEXT_COLOR;
