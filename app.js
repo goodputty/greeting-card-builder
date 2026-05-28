@@ -1,3 +1,4 @@
+// v1779952859
 // ═══════════════════════════════════════════════════════════════════════════
 // ★ CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════
@@ -47,9 +48,10 @@ const HAIRSTYLES = {
   Male:   ["Tousled", "Sleek", "Classic", "Curls", "None"],
 };
 
-const OUTFITS = ["Smart", "Shimmery", "Striped", "Blazer", "Casual"];
+const FEMALE_OUTFITS = ["Smart", "Shimmery", "Striped", "Blazer", "Casual"];
+const MALE_OUTFITS   = ["Layered", "Skater", "Plaid", "Relaxed", "Smart"];
 
-const ACCESSORIES = ["None", "Balloons", "Gift Box", "Champagne"];
+const ACCESSORIES = ["None", "Balloons", "Gift-Box", "Champagne"];
 
 const PRINT_W = 874;
 const PRINT_H = 1240;
@@ -196,12 +198,13 @@ function buildGenderGrid() {
       state.gender = gen;
       // Reset hair to first style for new gender
       state.hair = HAIRSTYLES[gen][0];
+      state.outfit = gen === "Female" ? FEMALE_OUTFITS[0] : MALE_OUTFITS[0];
       render();
       // Rebuild all gender-dependent sections
       buildGenderGrid();
       buildThumbGrid("hair-grid", HAIRSTYLES[gen], () => state.hair,
         v => { state.hair = v; }, s => hairPreview(state.hairColor, s));
-      buildThumbGrid("clothes-grid", OUTFITS, () => state.outfit,
+      buildThumbGrid("clothes-grid", state.gender === "Female" ? FEMALE_OUTFITS : MALE_OUTFITS, () => state.outfit,
         v => { state.outfit = v; }, o => outfitPreview(o));
       buildThumbGrid("acc-grid", ACCESSORIES, () => state.accessory,
         v => { state.accessory = v; }, a => a === "None" ? null : accPreview(a));
@@ -435,7 +438,7 @@ function init() {
   buildThumbGrid("hair-grid", HAIRSTYLES[state.gender], () => state.hair,
     v => { state.hair = v; }, s => hairPreview(state.hairColor, s));
 
-  buildThumbGrid("clothes-grid", OUTFITS, () => state.outfit,
+  buildThumbGrid("clothes-grid", state.gender === "Female" ? FEMALE_OUTFITS : MALE_OUTFITS, () => state.outfit,
     v => { state.outfit = v; }, o => outfitPreview(o));
 
   buildThumbGrid("acc-grid", ACCESSORIES, () => state.accessory,
