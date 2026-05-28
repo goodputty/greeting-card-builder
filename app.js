@@ -1,4 +1,4 @@
-// v1779980466
+// v1779993508
 // ═══════════════════════════════════════════════════════════════════════════
 // ★ CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════
@@ -139,8 +139,8 @@ function render() {
 
   recipientText.setAttribute("fill", state.textColor);
   messageText.setAttribute("fill", state.textColor);
-  recipientText.textContent = state.recipient ? state.recipient.toUpperCase() : "";
-  messageText.textContent   = state.message || "";
+  recipientText.textContent = state.recipient ? state.recipient.toUpperCase() : "RECIPIENT NAME";
+  messageText.textContent   = state.message || "Happy Birthday!";
 
   fitSvgText(recipientText, cardWrap, 0.022, 0.008);
   fitSvgText(messageText,   cardWrap, 0.09,  0.045);
@@ -339,7 +339,7 @@ async function exportCard() {
       ctx.font = "400 22px Lora, Georgia, serif";
       ctx.letterSpacing = "2px";
       ctx.textBaseline = "alphabetic";
-      ctx.fillText(str, PRINT_W / 2, PRINT_H * 0.76 + 42);
+      ctx.fillText(str, PRINT_W / 2, PRINT_H * 0.80 + 42);
       ctx.letterSpacing = "0px";
     }
 
@@ -352,7 +352,7 @@ async function exportCard() {
         ctx.font = fs + 'px "De Lionist", Georgia, serif';
       }
       ctx.textBaseline = "alphabetic";
-      ctx.fillText(str, PRINT_W / 2, PRINT_H * 0.855 + 42);
+      ctx.fillText(str, PRINT_W / 2, PRINT_H * 0.895 + 42);
     }
 
     const fileName = (state.recipient.trim() || "card") + ".png";
