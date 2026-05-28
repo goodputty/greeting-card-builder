@@ -1,4 +1,4 @@
-// v1779979106
+// v1779980466
 // ═══════════════════════════════════════════════════════════════════════════
 // ★ CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════
@@ -85,7 +85,7 @@ function accSrc()        { return ACCS_DIR     + "/" + g() + "-Birthday-" + stat
 function skinPreview(s)  { return preview(g() + "-Birthday-Skintone-" + s); }
 function hairPreview(c, s) { return preview(g() + "-Birthday-" + c + "-" + s.replace(/ /g, "-")); }
 function outfitPreview(o){ return preview(g() + "-Birthday-" + o); }
-function accPreview(a)   { return preview(g() + "-Birthday-" + a); }
+function accPreview(a)   { return preview("Female-Birthday-" + a); }
 function genderPreview(gen) { return GENDER_DIR + "/Birthday-" + gen + ".png"; }
 
 // ═══════════════════════════════════════════════════════════════════════════
