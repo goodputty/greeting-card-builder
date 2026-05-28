@@ -1,4 +1,4 @@
-// v1779953999
+// v1779978243
 // ═══════════════════════════════════════════════════════════════════════════
 // ★ CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════
@@ -51,7 +51,7 @@ const HAIRSTYLES = {
 const FEMALE_OUTFITS = ["Smart", "Shimmery", "Striped", "Blazer", "Casual"];
 const MALE_OUTFITS   = ["Layered", "Skater", "Plaid", "Relaxed", "Smart"];
 
-const ACCESSORIES = ["None", "Balloons", "Gift-Box", "Champagne"];
+const ACCESSORIES = ["None", "Balloon", "Gift-Box", "Champagne-Glass"];
 
 const PRINT_W = 874;
 const PRINT_H = 1240;
