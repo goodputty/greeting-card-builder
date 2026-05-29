@@ -1,4 +1,4 @@
-// v1779993508
+// v1780048203
 // ═══════════════════════════════════════════════════════════════════════════
 // ★ CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════
@@ -9,6 +9,7 @@ const GENDER_DIR   = BASE + "/01-gender";
 const SKINTONE_DIR = BASE + "/02-skintone";
 const HAIR_DIR     = BASE + "/03-hair";
 const GLASSES_DIR  = BASE + "/05-glasses";
+const FACIAL_HAIR_DIR = BASE + "/04-facial-hair";
 const OUTFITS_DIR  = BASE + "/06-outfits";
 const ACCS_DIR     = BASE + "/07-accessories";
 const WATERMARK_SRC = BASE + "/Watermark.jpg";
@@ -63,6 +64,7 @@ const state = {
   gender:    "Female",
   skin:      "Fair",
   glasses:   false,
+  facialHair: "Short",
   hairColor: "Black",
   hair:      "Bob",
   outfit:    "Smart",
@@ -79,6 +81,7 @@ function g()             { return state.gender; }
 function skinSrc()       { return SKINTONE_DIR + "/" + g() + "-Birthday-Skintone-" + state.skin + ".png"; }
 function hairSrc()       { return HAIR_DIR     + "/" + g() + "-Birthday-" + state.hairColor + "-" + state.hair.replace(/ /g, "-") + ".png"; }
 function glassesSrc()    { return GLASSES_DIR  + "/" + g() + "-Glasses-Birthday-Adult.png"; }
+function facialHairSrc() { return FACIAL_HAIR_DIR + "/Facial-Hair-Birthday-" + state.hairColor + "-" + state.facialHair + ".png"; }
 function outfitSrc()     { return OUTFITS_DIR  + "/" + g() + "-Birthday-" + state.outfit + ".png"; }
 function accSrc()        { return ACCS_DIR     + "/" + g() + "-Birthday-" + state.accessory + ".png"; }
 
@@ -96,6 +99,7 @@ const layerSkin      = document.getElementById("layer-skin");
 const layerOutfit    = document.getElementById("layer-outfit");
 const layerHair      = document.getElementById("layer-hair");
 const layerGlasses   = document.getElementById("layer-glasses");
+const layerFacialHair = document.getElementById("layer-facial-hair");
 const layerAcc       = document.getElementById("layer-acc");
 const recipientText  = document.getElementById("recipient-text");
 const messageText    = document.getElementById("message-text");
@@ -103,7 +107,9 @@ const recipientInput = document.getElementById("recipient-input");
 const messageInput   = document.getElementById("message-input");
 const recipientCount = document.getElementById("recipient-count");
 const messageCount   = document.getElementById("message-count");
-const glassesToggle  = document.getElementById("glasses-toggle");
+const glassesToggle    = document.getElementById("glasses-toggle");
+const facialHairToggle = document.getElementById("facial-hair-toggle");
+const facialHairLabel  = document.getElementById("facial-hair-label");
 const glassesLabel   = document.getElementById("glasses-label");
 const saveBtn        = document.getElementById("save-btn");
 const resetBtn       = document.getElementById("reset-btn");
@@ -123,6 +129,12 @@ function render() {
     setLayer(layerHair, hairSrc());
   } else {
     layerHair.style.display = "none";
+  }
+
+  if (state.gender === "Male" && state.facialHair !== "None") {
+    setLayer(layerFacialHair, facialHairSrc());
+  } else {
+    layerFacialHair.style.display = "none";
   }
 
   if (state.glasses) {
@@ -199,6 +211,7 @@ function buildGenderGrid() {
       // Reset hair to first style for new gender
       state.hair = HAIRSTYLES[gen][0];
       state.outfit = gen === "Female" ? FEMALE_OUTFITS[0] : MALE_OUTFITS[0];
+      initFacialHairToggle();
       render();
       // Rebuild all gender-dependent sections
       buildGenderGrid();
@@ -288,6 +301,36 @@ function buildTextColorRow(containerId, getSelected, onSelect) {
 }
 
 // Glasses toggle
+const FACIAL_HAIR_STYLES = ["Short", "Flecked", "Full", "None"];
+let facialHairListenerAdded = false;
+function initFacialHairToggle() {
+  const section = document.getElementById("facial-hair-section");
+  if (state.gender === "Male") {
+    section.style.display = "block";
+  } else {
+    section.style.display = "none";
+  }
+  facialHairToggle.checked = state.facialHair !== "None";
+  facialHairLabel.textContent = state.facialHair !== "None" ? "Yes" : "No";
+  if (!facialHairListenerAdded) {
+    facialHairToggle.addEventListener("change", () => {
+      state.facialHair = facialHairToggle.checked ? "Short" : "None";
+      facialHairLabel.textContent = facialHairToggle.checked ? "Yes" : "No";
+      // Show style selector when on
+      document.getElementById("facial-hair-style-section").style.display = facialHairToggle.checked ? "block" : "none";
+      render();
+    });
+    facialHairListenerAdded = true;
+  }
+  // Build style grid
+  buildThumbGrid("facial-hair-grid", FACIAL_HAIR_STYLES.filter(s => s !== "None"),
+    () => state.facialHair,
+    v => { state.facialHair = v; render(); },
+    s => "00-previews/Preview-Facial-Hair-Birthday-" + state.hairColor + "-" + s + ".png"
+  );
+  document.getElementById("facial-hair-style-section").style.display = state.facialHair !== "None" ? "block" : "none";
+}
+
 let glassesListenerAdded = false;
 function initGlassesToggle() {
   glassesToggle.checked = state.glasses;
@@ -327,6 +370,7 @@ async function exportCard() {
     await drawImg(skinSrc());
     await drawImg(outfitSrc());
     if (state.hair !== "None") await drawImg(hairSrc());
+    if (state.gender === "Male" && state.facialHair !== "None") await drawImg(facialHairSrc());
     if (state.glasses) await drawImg(glassesSrc());
     if (state.accessory !== "None") await drawImg(accSrc());
 
@@ -400,6 +444,7 @@ function resetApp() {
   state.gender    = "Female";
   state.skin      = "Fair";
   state.glasses   = false;
+  state.facialHair = "Short";
   state.hairColor = "Black";
   state.hair      = HAIRSTYLES[state.gender][0];
   state.outfit    = "Smart";
@@ -427,10 +472,12 @@ function init() {
   });
 
   initGlassesToggle();
+  initFacialHairToggle();
 
   buildSwatchRow("hair-color-grid", HAIR_COLORS, () => state.hairColor, v => {
     state.hairColor = v;
     render();
+    initFacialHairToggle();
     buildThumbGrid("hair-grid", HAIRSTYLES[state.gender], () => state.hair,
       s => { state.hair = s; }, s => hairPreview(state.hairColor, s));
   });
